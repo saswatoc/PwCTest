@@ -54,6 +54,7 @@ dependencies {
     compile group: 'io.cucumber', name: 'gherkin', version: '9.2.0'
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
 
 
     testImplementation 'io.cucumber:cucumber-java8:5.5.0'

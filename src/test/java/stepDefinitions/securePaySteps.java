@@ -10,6 +10,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
+
 
 public class securePaySteps {
 
@@ -49,17 +51,33 @@ public class securePaySteps {
     }
 
     @When("I navigate to (.+) page on SecurePay website")
-    public void i_navigate_to_page_on_SecurePay_website(String string) {
+    public void i_navigate_to_page_on_SecurePay_website(String contactUs) {
+
+        WebElement contact = driver.findElement(By.xpath("//*[@id=\"menu-item-126\"]/a"));
+        contactUs = contact.getText();
+        assertEquals("Contact Us", contactUs);
+        contact.click();
 
     }
 
     @Then("Contact Us page is successfully loaded")
     public void contact_Us_page_is_successfully_loaded() {
+        WebElement contactUsPage = driver.findElement(By.id("section-heading"));
+        assertEquals("Contact Us", contactUsPage.getText());
 
     }
 
     @Then("I should be able to view and fill up the contact us form")
     public void i_should_be_able_to_view_and_fill_up_the_contact_us_form() {
+
+        WebElement FirstName = driver.findElement(By.name("first-name"));
+        WebElement LastName = driver.findElement(By.name("last-name"));
+        WebElement Email = driver.findElement(By.name("email-address"));
+        WebElement PhoneNumber = driver.findElement(By.name("phone-number"));
+        WebElement Website = driver.findElement(By.name("website-url"));
+        WebElement Company = driver.findElement(By.name("business-name"));
+
+
 
     }
 
