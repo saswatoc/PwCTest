@@ -5,20 +5,26 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertEquals;
 
 
 public class pulseDigitalSteps {
 
     public static WebDriver driver;
-    public static String selector = "";
+    public String selector = "";
+    public static WebElement boxSearch;
 
 
     @Given("I navigate to the PwC Digital Pulse website")
@@ -83,87 +89,41 @@ public class pulseDigitalSteps {
     }
 
     @When("I click on the ‘Magnifying glass’ icon to perform a search And I enter the text ‘Single page applications’")
-    public void iClickOnTheMagnifyingGlassIconToPerformASearchAndIEnterTheTextSinglePageApplications() {
+    public static void iClickOnTheMagnifyingGlassIconToPerformASearchAndIEnterTheTextSinglePageApplications() throws ExecutionException{
 
         WebElement iconSearch = driver.findElement(By.cssSelector("i.btr:nth-child(4)"));
         iconSearch.click();
 
-        WebElement boxSearch = driver.findElement(By.id("search-input"));
+        boxSearch = driver.findElement(By.id("search-input"));
         boxSearch.sendKeys("Single page applications");
     }
 
     @And("I submit the search")
-    public void iSubmitTheSearch() {
+    public void iSubmitTheSearch() throws ExecutionException {
+
+        boxSearch.sendKeys(Keys.RETURN);
+
     }
 
     @Then("I am taken to the search results page")
-    public void iAmTakenToTheSearchResultsPage() {
+    public void iAmTakenToTheSearchResultsPage() throws ExecutionException {
+        //Verifying the user is one the search results page
+
+        WebElement resultsPage = driver.findElement(By.xpath("/html/body/div[1]/section[1]/div/div/span"));
+        resultsPage.getText();
+        assertThat(resultsPage.getText(), containsString("search results"));
+
+
     }
 
-    @And("I am presented with at least {int} search result")
-    public void iAmPresentedWithAtLeastSearchResult(int arg0) {
+    @And("I am presented with at least (.+) search result")
+    public void iAmPresentedWithAtLeastSearchResult(int items) {
+
+        List searchResults = driver.findElements(By.cssSelector("section.container:nth-child(4) > div:nth-child(1)"));
+        items = searchResults.size();
+        assertThat(items, greaterThan(1));
 
         driver.close();
     }
-
-
-//    @When("I clicks through to SecurePay website")
-//    public void i_clicks_through_to_SecurePay_website() {
-//
-//        WebElement securePayLink = driver.findElement(By.xpath("//*[@id=\"rso\"]/div[1]/div/div/div[1]/a/h3"));
-//        securePayLink.click();
-//        driver.manage().timeouts().pageLoadTimeout(3,TimeUnit.SECONDS);
-//
-//    }
-//
-//    @When("I navigate to (.+) page on SecurePay website")
-//    public void i_navigate_to_page_on_SecurePay_website(String contactUs) {
-//
-//        WebElement contact = driver.findElement(By.xpath("//*[@id=\"menu-item-126\"]/a"));
-//        contactUs = contact.getText();
-//        assertEquals("Contact Us", contactUs);
-//        contact.click();
-//
-//    }
-
-//    @Then("Contact Us page is successfully loaded")
-//    public void contact_Us_page_is_successfully_loaded() {
-//        WebElement contactUsPage = driver.findElement(By.id("section-heading"));
-//        assertEquals("Contact Us", contactUsPage.getText());
-//
-//    }
-//
-//    @Then("I should be able to view and fill up the contact us form")
-//    public void i_should_be_able_to_view_and_fill_up_the_contact_us_form() {
-//
-//        FakeValuesService fakeValuesService = new FakeValuesService(
-//                new Locale("en-GB"), new RandomService());
-//
-//        WebElement FirstName = driver.findElement(By.name("first-name"));
-//        String firstName = fakeValuesService.letterify("????##");
-//        FirstName.sendKeys(firstName);
-//
-//        WebElement LastName = driver.findElement(By.name("last-name"));
-//        String lastName = fakeValuesService.letterify("????##");
-//        LastName.sendKeys(lastName);
-//
-//        WebElement Email = driver.findElement(By.name("email-address"));
-//        String email = fakeValuesService.bothify("????##???###@gmail.com");
-//        Email.sendKeys(email);
-//
-//        WebElement PhoneNumber = driver.findElement(By.name("phone-number"));
-//        String phoneNumber = fakeValuesService.numerify("????##??");
-//        PhoneNumber.sendKeys(phoneNumber);
-//
-////        WebElement Website = driver.findElement(By.name("website-url"));
-//        WebElement Company = driver.findElement(By.name("business-name"));
-//        String companyName = fakeValuesService.letterify("?????####");
-//        Company.sendKeys(companyName);
-//
-//        driver.close();
-//
-//    }
-
-
 
 }
