@@ -79,14 +79,17 @@ public class pulseDigitalSteps {
         assertEquals(3, items2);
 
 
-
-
-
         driver.close();
     }
 
     @When("I click on the ‘Magnifying glass’ icon to perform a search And I enter the text ‘Single page applications’")
     public void iClickOnTheMagnifyingGlassIconToPerformASearchAndIEnterTheTextSinglePageApplications() {
+
+        WebElement iconSearch = driver.findElement(By.cssSelector("i.btr:nth-child(4)"));
+        iconSearch.click();
+
+        WebElement boxSearch = driver.findElement(By.id("search-input"));
+        boxSearch.sendKeys("Single page applications");
     }
 
     @And("I submit the search")
