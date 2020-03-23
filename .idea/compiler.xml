@@ -4,6 +4,10 @@
     <bytecodeTargetLevel>
       <module name="digitalPulseTest.main" target="1.8" />
       <module name="digitalPulseTest.test" target="11" />
+      <module name="Pulse.main" target="1.8" />
+      <module name="Pulse.test" target="11" />
+      <module name="SecurePayTest.main" target="1.8" />
+      <module name="SecurePayTest.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

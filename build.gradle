@@ -14,7 +14,7 @@ compileJava {
 
 repositories {
     if (!project.hasProperty('ciMode'))
-    mavenCentral()
+        mavenCentral()
 }
 
 dependencies {

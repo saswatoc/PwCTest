@@ -1,7 +1,5 @@
 package stepDefinitions;
 
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,101 +10,76 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.*;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-import java.io.*;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class pulseDigitalSteps {
 
-    static WebDriver driver;
+    public static WebDriver driver;
     public static String selector = "";
 
-
-//    @Given("I launch chrome browser")
-//    public void iLaunchChromeBrowser() throws InterruptedException {
-//
-//        //The below piece of code to invoke Chromedriver on MAC (provided you have downloaded it, see ReadMe)
-//        //Comment out the one you don't need
-//        System.setProperty("webdriver.chrome.driver","/Users/saswatochowdhury/Downloads/Installers/chromedriver");
-//        driver = new ChromeDriver();
-//
-//        driver.manage().window().maximize();
-////        driver.manage().timeouts().pageLoadTimeout(2, TimeUnit.SECONDS);
-//        driver.get("http://www.google.com/");
-//
-//    }
 
     @Given("I navigate to the PwC Digital Pulse website")
     public void iNavigateToThePwCDigitalPulseWebsite() throws InterruptedException {
 
-        //The below piece of code to invoke Chromedriver on MAC (provided you have downloaded it, see ReadMe)
-        //Comment out the one you don't need
+        //The below piece of code to invoke Chromedriver on MAC
+        //Replace the path with your system's chromedriver location
+
         System.setProperty("webdriver.chrome.driver","/Users/saswatochowdhury/Downloads/Installers/chromedriver");
         driver = new ChromeDriver();
-
         driver.manage().window().maximize();
-//        driver.manage().timeouts().pageLoadTimeout(2, TimeUnit.SECONDS);
         driver.get("https://www.digitalpulse.pwc.com.au");
     }
 
 
-
     @When("I am viewing the ‘Home’ page")
-    public void iAmViewingTheHomePage() throws  InterruptedException {
-        WebElement homePage = driver.findElement(By.xpath("//*[@id=\"menu-main-menu-1\"]/li[1]/a"));
-        assertEquals(homePage.getText(), "Home");
-        homePage.click();
+    public void iAmViewingTheHomePage() {
+        //Checks for the Digital Pulse logo and finds out the link for the same and validates with home-page url
+
+        WebElement digitalPulseLogo = driver.findElement(By.xpath("/html/body/div[1]/header/div[1]/div/a[2]"));
+        String homePageLink = digitalPulseLogo.getAttribute("href");
+        assertEquals("https://www.digitalpulse.pwc.com.au", homePageLink);
+
     }
 
     @Then("I am presented with a carousel displaying (.+) featured articles")
-    public void iAmPresentedWithACarouselDisplayingFeaturedArticles(int numb, String args[]) {
-        selector = "li[class^=a-carousel-card]";
-//        ArrayList items = (ArrayList) driver.findElements(By.cssSelector("li.flex:nth-child(2)"));
-        ArrayList items = (ArrayList) driver.findElements(By.cssSelector(selector));
+    public void iAmPresentedWithACarouselDisplayingFeaturedArticles(int items0) {
 
-        ArrayList<String> list1 = new ArrayList<String>();
-        String name;
+        List elements = driver.findElements(By.cssSelector("li.flex:nth-child(2)"));
+        List<String> values = new ArrayList<>();
+        items0 = elements.size();
+        assertEquals(3,items0);
 
-        for(int i=0;i<items;i++) {
-            int index = i + 1;
 
-            name = driver.findElement(By.cssSelector(selector + "[" + index + "]")).getText();
-            list1.add(name);
-
-        }
 
     }
 
+    @And("Clicking the ‘Next’ button on the carousel will load the next (.+) featured articles")
+    public void clickingTheNextButtonOnTheCarouselWillLoadTheNextFeaturedArticles(int items1) {
 
+        WebElement caraouselNext = driver.findElement(By.cssSelector(".flex-next"));
+        caraouselNext.click();
 
-    @And("Clicking the ‘Next’ button on the carousel will load the next {int} featured articles")
-    public void clickingTheNextButtonOnTheCarouselWillLoadTheNextFeaturedArticles(int arg0) {
-
-        driver.findElement(By.cssSelector("div[class^=a-carousel-col] a")).click();
-
-        ArrayList nextItems = (ArrayList) driver.findElements(By.cssSelector(selector));
-
-        ArrayList list2 = new ArrayList();
-
-        String newName;
-
-        for (int i = 0; i < nextItems; i++) {
-            int index = i + 1;
-
-            //This will get the name of each item in carousel
-            newName = driver.findElement(By.cssSelector(selector + "[" + index + "]")).getText();
-            list2.add(newName);
-        }
+        List elements = driver.findElements(By.cssSelector("li.flex:nth-child(3)"));
+        items1 = elements.size();
+        assertEquals(3, items1);
 
     }
 
-    @And("Clicking the ‘Previous’ button on the carousel will load the previous {int} featured articles")
-    public void clickingThePreviousButtonOnTheCarouselWillLoadThePreviousFeaturedArticles(int arg0) {
+    @And("Clicking the ‘Previous’ button on the carousel will load the previous (.+) featured articles")
+    public void clickingThePreviousButtonOnTheCarouselWillLoadThePreviousFeaturedArticles(int items2) {
+
+        WebElement carouselPrevious = driver.findElement(By.cssSelector(".flex-prev"));
+        carouselPrevious.click();
+
+        List elements = driver.findElements(By.cssSelector("li.flex:nth-child(2)"));
+        items2 = elements.size();
+        assertEquals(3, items2);
+
+
+
 
 
         driver.close();
